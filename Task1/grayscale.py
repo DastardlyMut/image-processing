@@ -7,7 +7,7 @@ import numpy
 
 def main(filename):
 	#open file.
-	ppm_in = open('testcard32.ppm','r')
+	ppm_in = open(filename,'r')
 	ppm_out = open('output.ppm','w')
 	#extract headers from .ppm file.
 	ppmformat = ppm_in.readline()
@@ -20,8 +20,8 @@ def main(filename):
 	# pixels = ppm_in.read().split()
 	outRGB = [];
 	#read in bits and apply transformation
-	for i in range(size_width):
-		for j in range(size_height):
+	for i in range(size_height):
+		for j in range(size_width):
 			tR = ppm_in.readline()
 			tG = ppm_in.readline()
 			tB = ppm_in.readline()
@@ -29,18 +29,17 @@ def main(filename):
 			tGray = 0.299*float(tR) + 0.587*float(tG) + 0.114*float(tB)
 
 			outRGB.append([int(tGray),int(tGray),int(tGray)])
-	
-	print(outRGB)
+
 	#print to output file
 	ppm_out.write("{0} \n".format(ppmformat))
 	ppm_out.write("# This image has been grayscaled by Sean Devonport \n")
-	ppm_out.write("{0:3d} {0:3d} \n".format(size_width,size_height))
-	ppm_out.write("{0:3d} \n".format(maxcolour))
+	ppm_out.write("{0} {1} \n".format(size_width,size_height))
+	ppm_out.write("{0} \n".format(maxcolour))
 
-	for i in range(size_width):
-		for j in range(size_height): 
+	for i in range(size_height):
+		for j in range(size_width): 
 			tRGB = outRGB.pop(0)
-			ppm_out.write("{0:3d} {0:3d} {0:3d} \n".format(tRGB[0],tRGB[1],tRGB[2]))
+			ppm_out.write("{0:3d} {0:3d} {0:3d}\n".format(tRGB[0],tRGB[1],tRGB[2]))
 
 
 	ppm_in.close()
