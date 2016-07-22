@@ -1,58 +1,36 @@
 #grayscale_sng.py
 #Author: Sean Devonport
 #This script takes a .ppm image, does a grayscale transformation using single RGB
-#and returns the grayscaled image. Test images taken from GIMP.
+#and returns the grayscaled image for each channel.
+#Test images taken from GIMP.
+
 import sys
-import numpy
+import ppmreader as reader
 
-# def printf(pixels,file):
-# 	if len(pixels) == 0:
-# 		return
-# 	else: 
-# 		tRGB = outRGB.pop(0)
-# 		file.write("{0:3d} {0:3d} {0:3d}\n".format(tRGB[0],tRGB[1],tRGB[2])
-	
 def main(filename):
-	#open file.
-	ppm_in = open(filename,'r')
-	ppm_out = open('output.ppm','w')
-	#extract headers from .ppm file.
-	ppmformat = ppm_in.readline()
-	comment = ppm_in.readline().splitlines()
-	size_width,size_height = ppm_in.readline().split()
-	size_width = int(size_width)
-	size_height = int(size_height)
-	maxcolour = int(ppm_in.readline())
-	#read body of file.
-	# pixels = ppm_in.read().split()
-	outRGB = [];
-	#read in bits and apply transformation
-	for i in range(size_height):
-		for j in range(size_width):
-			tR = ppm_in.readline()
-			tG = ppm_in.readline()
-			tB = ppm_in.readline()
+	#open and extract headers from .ppm file.
+	[size,mxcolour,pixels] = reader.ppmreader(filename)
 
-			tGray = (tR+tG+tB)/2
-			tGray = 0.299*float(tR) + 0.587*float(tG) + 0.114*float(tB)
+	header = "P2\n# This is image has been grayscaled by Sean Devonport\n{0} {1}\n{2}\n".format(size[0],size[1],mxcolour)
 
-			outRGB.append([int(tGray),int(tGray),int(tGray)])
+	#create output file for each channel.
+	ppm_r = open('output_sc_r.pgm','w')
+	ppm_g = open('output_sc_g.pgm','w')
+	ppm_b = open('output_sc_b.pgm','w')
 
-	#print to output file
-	ppm_out.write("{0} \n".format(ppmformat))
-	ppm_out.write("# This image has been grayscaled by Sean Devonport \n")
-	ppm_out.write("{0} {1} \n".format(size_width,size_height))
-	ppm_out.write("{0} \n".format(maxcolour))
+	# print header to output files
+	ppm_r.write(header)
+	ppm_g.write(header)
+	ppm_b.write(header)
 
-	# printf(outRGB,ppm_out)
+	#Apply transformation to pixels and print
+	for i in pixels:
+		ppm_r.write("%d\n"%(i[0]))
+		ppm_g.write("%d\n"%(i[1]))
+		ppm_b.write("%d\n"%(i[2]))
 
-	for i in range(size_height):
-		for j in range(size_width): 
-			tRGB = outRGB.pop(0)
-			ppm_out.write("{0:3d} {0:3d} {0:3d}\n".format(tRGB[0],tRGB[1],tRGB[2]))
-
-
-	ppm_in.close()
-	ppm_out.close()
+	ppm_r.close()
+	ppm_g.close()
+	ppm_b.close()
 
 main(sys.argv[1])
