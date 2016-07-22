@@ -10,7 +10,7 @@ def main(filename):
 	[size,mxcolour,pixels] = reader.ppmreader(filename)
 
 	#create output file to print to.
-	ppm_out = open('output.pgm','w')
+	ppm_out = open('output_gray_avg.pgm','w')
 
 	header = "P2\n# This is image has been grayscaled by Sean Devonport\n{0} {1}\n{2}\n".format(size[0],size[1],mxcolour)
 
