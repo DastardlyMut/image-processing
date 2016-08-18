@@ -60,15 +60,14 @@ def encode_img(b_msg,b_img):
 
 	# encode back into BGR
 	enc_img = [[[int(str(b_img[i][j][k]),2) for k in range(0,3)] for j in range(0,n_px[1])] for i in range(0,n_px[0])]
-	print b_img[0][1]
-	print enc_img[0][1]
+
 	# write to file
 	writeFile('encoded',enc_img)
 
 	return cv.imread('encoded.ppm')
 
 
-def encode(filename,msg='I like to hide things'):
+def encode(filename,msg='IMPORTANT STUFF **'):
 	# read in image, convert to binary
 	img = cv.imread(filename)
 	sz_img=np.shape(img)
@@ -78,10 +77,10 @@ def encode(filename,msg='I like to hide things'):
 
 	# Convert secret message to binary
 	bin_msg = str_to_bin(msg)
+	print bin_msg
 	# encode the image
 	enc_img=encode_img(bin_msg,bin_img)
 
-	#print asc_msg
 	cv.imshow('original', img)
 	cv.imshow('encode',img)
 	cv.waitKey(0)

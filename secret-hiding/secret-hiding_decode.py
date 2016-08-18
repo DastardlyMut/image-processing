@@ -28,16 +28,21 @@ def decode(filename):
 	print msg_len
 	msg=''
 	b_msg=''
-	i = 1
 	for i in range(1,msg_len):
 		if(len(msg)==20):
 			b_msg+=str(b_img[0][i][0][4:]) + str(b_img[0][i][1][4:]) 
+			break
 		else:
 			b_msg+=str(b_img[0][i][0][4:]) + str(b_img[0][i][1][4:]) + str(b_img[0][i][2][4:])
 		
 	print b_msg
-	
+
 	msg = bin_to_str(b_msg)
+
+	#clean up
+	end = msg.find('*')
+	msg = msg[:end]
+
 	print msg
 
 decode('encoded.ppm')
