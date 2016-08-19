@@ -17,35 +17,33 @@ def encode(px):
 
 	enc_px1 = np.zeros((2*sz_img[0],2*sz_img[1]))
 	enc_px2 = np.zeros((2*sz_img[0],2*sz_img[1]))
-	#print np.shape(enc_px2)
-	#print range(0,sz_img[0])
-	#print range(0,sz_img[1])
+	
 	for i in range(0,sz_img[0]):
 		for j in range(0,sz_img[1]):
+			# toss coin
 			coin = rdm.randrange(0,2)
-			#print 'here'
 			if img[i][j]==0:
 			# encode black pixels into layers
 				if coin == 1:
-					enc_px1[2*i][2*j]=255
-					enc_px1[2*i+1][2*j]=0
-					enc_px1[2*i][2*j+1]=0
-					enc_px1[2*i+1][2*j+1]=255
-					
-					enc_px2[2*i][2*j]=0
-					enc_px2[2*i+1][2*j]=255
-					enc_px2[2*i][2*j+1]=255
-					enc_px2[2*i+1][2*j+1]=0
-				else:
 					enc_px1[2*i][2*j]=0
 					enc_px1[2*i+1][2*j]=255
 					enc_px1[2*i][2*j+1]=255
 					enc_px1[2*i+1][2*j+1]=0
-
+					
 					enc_px2[2*i][2*j]=255
 					enc_px2[2*i+1][2*j]=0
 					enc_px2[2*i][2*j+1]=0
 					enc_px2[2*i+1][2*j+1]=255
+				else:
+					enc_px1[2*i][2*j]=255
+					enc_px1[2*i+1][2*j]=0
+					enc_px1[2*i][2*j+1]=0
+					enc_px1[2*i+1][2*j+1]=255
+
+					enc_px2[2*i][2*j]=0
+					enc_px2[2*i+1][2*j]=255
+					enc_px2[2*i][2*j+1]=255
+					enc_px2[2*i+1][2*j+1]=0
 			else:
 			# encode white pixels into layers
 				if coin == 1:
@@ -68,6 +66,7 @@ def encode(px):
 					enc_px2[2*i+1][2*j]=255
 					enc_px2[2*i][2*j+1]=255
 					enc_px2[2*i+1][2*j+1]=0
+
 	return enc_px1, enc_px2
 
 def overlay(src,mask):
@@ -80,12 +79,11 @@ def overlay(src,mask):
 			if int(src[i][j])==255 & int(mask[i][j])==255:
 				out[i][j]=255
 			elif int(src[i][j])==0 & int(mask[i][j])==0:
-				out[i][j]=255
+				out[i][j]=0
 			elif int(src[i][j])==0 & int(mask[i][j])==255:
-				out[i][j]=0
+				out[i][j]=255
 			elif int(src[i][j])==255 & int(mask[i][j])==0:
-				out[i][j]=0
-
+				out[i][j]=255
 
 	return out
 
@@ -98,14 +96,21 @@ def hideImage(filename):
 	#print img
 	# encode image into two seperate images
 	enc_img1, enc_img2 = encode(img)
-
-	# ov_img = overlay(enc_img1,enc_img2)
-	ov_img = enc_img1 + enc_img2
+	# overlay image
+	ov_img = overlay(enc_img1,enc_img2)
+	
+	# write images
+	cv.imwrite('overlay.ppm',ov_img)
+	cv.imwrite('enc_img1.ppm',enc_img1)
+	cv.imwrite('enc_img2.ppm',enc_img2)
+	
+	# display images
 	cv.imshow('layer 1',enc_img1)
 	cv.imshow('layer 2',enc_img2)
 	cv.imshow('frame', img)
 	cv.imshow('overlay',ov_img)
 	cv.waitKey(0)
+
 	cv.destroyAllWindows
 
 
