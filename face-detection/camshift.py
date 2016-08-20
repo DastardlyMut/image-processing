@@ -7,6 +7,7 @@ import numpy as np
 import cv2
 
 cap = cv2.VideoCapture(0)
+# cap = cap.set(cv2.CV_CAP_PROP_BRIGHTNESS,50)
 
 # take first frame of the video
 ret,frame = cap.read()

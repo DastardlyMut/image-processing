@@ -6,7 +6,6 @@ Author: dastardlymut
 
 Script that calculates Viola Jones algorithm using OpenCv
 
-
 '''
 
 import numpy as np
