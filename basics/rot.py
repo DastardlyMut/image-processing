@@ -32,10 +32,11 @@ def rotate(filename,angle):
 
 	for i in range(nsize[1]):
 		for j in range(nsize[0]):
+			# calculate new pixel x,y index 
 			xn = int(math.cos(rad)*(j-ncen[0]) - math.sin(rad)*(i-ncen[1])) + ncen[0]-1 
 			yn = int(math.sin(rad)*(j-ncen[0]) + math.cos(rad)*(i-ncen[1])) + ncen[1]-1
 
-			# interpolate for pixels not in image using nearest neighbour
+			# only move pixels that are within the limits of the image.
 			xdif = xn-cdif[0]
 			ydif = yn-cdif[1]
 			if (xdif<size[0]) and (xdif>=0) and (ydif<size[1]) and (ydif>=0):
